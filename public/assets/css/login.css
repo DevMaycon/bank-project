@@ -1,0 +1,185 @@
+* { 
+    --backgroundColor: rgb(228, 219, 191);
+    --textColor: rgb(255, 255, 255);
+
+
+    --leftBackground: rgb(235, 235, 235);
+    --loginBackgroundColor: rgb(1,1,1);
+    --separatorColor: rgb(204, 204, 204);
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body, html {
+    margin: 0px;
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--backgroundColor);
+}
+
+#back-home {
+    position: absolute;
+    display: flex;
+    background-color: var(--loginBackgroundColor);
+    color: var(--textColor);
+    padding: 0.1vh;
+    width: 25px;
+    height: 25px;
+    margin: 3vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 45%;
+    scale: 1.5;
+    font-weight: 800;
+
+}
+
+.container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    color: var(--textColor);
+    background-color: var(--loginBackgroundColor);
+    height: 60%;
+    min-height: 60%;
+    width: 30%;
+    max-width: 65%;
+    min-width: 480px;
+    padding: 2vh;
+    border-radius: 20px;
+}
+
+.right-container form {
+    display: grid;
+    flex: 1;
+}
+
+
+.right-container form label{
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    align-items: center;
+    text-align: center;
+    margin: 1vh;
+    margin-top: 5vh; 
+    height: max-content;
+}
+
+.right-container form span {
+    text-align: right;
+    margin: 1vh;
+}
+
+.right-container form input {
+    position: relative;
+    border-radius: 20px;
+    padding: 1vh 2vh 1vh 2vh;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    flex: 1;
+    width: 95%;
+}
+
+.right-container form input {
+    transition: all 0.2s;
+    background-color: var(--loginBackgroundColor);
+}
+
+.right-container input:focus {
+    scale: 1.2;
+}
+
+.right-container h1 {
+    text-align: center;
+    border-bottom: solid var(--separatorColor) 3px;
+    padding: 0vh 5vh 2vh 5vh;
+    margin: 1vh;
+}
+
+
+#submit-btn {
+    width: 100%;
+    border-radius: 35px;
+    padding: 1vh;
+    background: var(--backgroundColor);
+    color: var(--loginBackgroundColor);
+    border: 2px solid var(--backgroundColor);
+    font-weight: 600;
+    font-size: 1em;
+    align-self: flex-end;
+    transition: all 0.2s;
+    height: 5vh;
+}
+
+#submit-btn:hover {
+    scale: 1.05;
+    background-color: rgb(221, 187, 19);
+    border: 2px solid rgb(221, 187, 19);
+}
+
+.forget {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: end;
+}
+
+.forget a {
+    text-decoration: none;
+    border-bottom: 1px solid white;
+    color: gray;
+}
+
+@media screen and (max-width: 748px) {
+    .right-container {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        min-width: 100%;
+        height: 99%;
+        border-radius: 20px;
+        margin: 1vh;
+        padding: 0px;
+    }
+
+    .right-container form{
+        margin: 5vh;
+
+    }
+    
+    .right-container input:focus {
+        scale: 1.05;
+    }
+
+    .container {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        background-color: var(--loginBackgroundColor);
+    }
+
+    .forget {
+        height: 50%;
+    }
+
+    .forget a {
+        font-size: 80%;
+        margin-bottom: 1vh;
+    }
+
+    body {
+        background-color: var(--loginBackgroundColor);
+    }
+}
