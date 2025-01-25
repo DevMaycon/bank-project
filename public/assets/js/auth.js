@@ -2,7 +2,8 @@ const API_URL = "http://myurl.com"
 const MESSAGE_ERRORS = {
     "inputError": "Verifique os campos novamente!",
     "invalidCredential": "Usuario ou senha incorreto!",
-    "loginError": "Opss, parece que estamos fora do ar, espere mais alguns minutos..."
+    "loginError": "Opss, parece que estamos fora do ar, espere mais alguns minutos...",
+    "tooManyRequests": "Espere um tempo antes de enviar novamente!"
 }
 
 function handle_error(messageType, value="") {
@@ -15,14 +16,23 @@ function handle_error(messageType, value="") {
 }
 
 async function login() {
-    let inputs = [
+    const inputs = [
         document.getElementById('username-input'),
         document.getElementById('password-input')
     ];
+    const submitButton = document.getElementById('submit-btn');
 
     if (inputs[0].value == "" || inputs[1].value == "") {
-        handle_error("inputError")
+        return handle_error("inputError")
+    } else if (submitButton.isActive) {
+        return handle_error("tooManyRequests")
     }
+
+    submitButton.isActive = true;
+    setTimeout(() => {
+        submitButton.isActive = false
+        }, 5000
+    )
 
     const request = fetch(`${API_URL}/auth`, {
         method: "POST",
