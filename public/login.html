@@ -11,21 +11,22 @@
         <div class="container">
             <div class="right-container">
                 <h1>Faça seu login</h1>
-                <form action="/login" method="post">
+                <form>
                     <div class="inputs">
                         <label>
                             <span>Usuário ou E-mail</span>
-                            <input name="username" autocomplete="username" type="text" placeholder="Digite seu usuário">
+                            <input id="username-input" name="username" autocomplete="username" type="text" placeholder="Digite seu usuário">
                         </label>
                         <label>
                             <span>Senha</span>
-                            <input name="password" autocomplete="current-password" type="password" placeholder="Digite sua senha">
+                            <input id="password-input" name="password" autocomplete="current-password" type="password" placeholder="Digite sua senha">
                         </label>
                     </div>
+                    <div id="error-message" style="text-align: center; color: red; font-weight: 600; transition: 0.2s all"></div>
                     <div class="forget">
                         <a href="">Esqueceu sua senha?</a>
                         <a href="">Criar minha conta</a>
-                        <button id="submit-btn" type="submit">Entrar</button>
+                        <button id="submit-btn" onclick="login()" type="button"">Entrar</button>
                     </div>
                 </form>
             </div>
