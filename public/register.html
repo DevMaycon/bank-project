@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="assets/css/login.css">
+        <link rel="stylesheet" href="assets/css/register.css">
+        <script src="assets/js/auth.js"></script>
+        <title>Faça seu login | Finance</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="right-container">
+                <h1>Faça seu login</h1>
+                <form>
+                    <div class="inputs">
+                        <label>
+                            <span>Nome de Usuário</span>
+                            <input id="username-input" name="username" autocomplete="name" type="text" placeholder="Digite seu novo usuário">
+                        </label>
+                        <label>
+                            <span>E-mail</span>
+                            <input id="email-input" name="email" autocomplete="email" type="text" placeholder="Digite seu e-mail">
+                        </label>
+                        <label>
+                            <span>Senha</span>
+                            <input id="password-input" name="password" autocomplete="new-password" type="password" placeholder="Digite sua senha">
+                        </label>
+                        <label>
+                            <span>Confirme sua senha</span>
+                            <input id="confirm-password-input" name="confirm-password" autocomplete="current-password" type="password" placeholder="Confirme sua senha">
+                        </label>
+                    </div>
+                    <div id="error-message" style="text-align: center; color: red; font-weight: 600; transition: 0.2s all"></div>
+                        <button id="submit-btn" onclick="createAccount()" type="button"">Criar conta</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

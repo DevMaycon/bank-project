@@ -1,0 +1,13 @@
+.right-container form label {
+    align-items: start;
+    margin: 1vh;
+    margin-top: 1.5vh;
+}
+
+.right-container form label input {
+    border-radius: 10px;
+}
+
+.right-container form label input:focus {
+    scale: 1;
+}
