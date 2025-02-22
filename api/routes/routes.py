@@ -1,5 +1,8 @@
-from flask import Blueprint, jsonify
-from utils import messages
+from flask import Blueprint, request
+from flask_cors import cross_origin
+from json import loads
+import services.auth_logic
+import services
 
 # Blueprints das rotas
 auth_blueprint = Blueprint('auth', __name__)
@@ -13,8 +16,17 @@ def configure_routes(app):
 
 # Autenticação
 @auth_blueprint.route('/login', methods=["POST"])
+@cross_origin(supports_credentials=True)
 def auth():
-    pass
+    login_data = request.json
+    response = services.auth_logic.auth(login_data)
+    
+    response_text = loads(response[0].response[0])
+    
+    if  response_text['status'] == "success":
+        return response
+    else:
+        return response
 
 # Rotas do usuario
 @user_blueprint.route('/register', methods=["POST"])
