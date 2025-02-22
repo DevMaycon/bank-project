@@ -1,4 +1,4 @@
-const API_URL = "http://myurl.com"
+const API_URL = "http://localhost:5500"
 const MESSAGE_ERRORS = {
     "apiError": "Opss, parece que estamos fora do ar, espere mais alguns minutos...",
     "invalidCredentials": "Usuário ou senha incorreto!",
@@ -22,9 +22,9 @@ function handle_error(messageType, value="") {
 function handle_inputs(inputs) {
     const submitButton = document.getElementById('submit-btn');
     let inputValues = []
-    inputs.forEach((x) => {
-        if (x.value != '') {
-            inputValues.push(x.value)
+    inputs.forEach((input) => {
+        if (input.value != '') {
+            inputValues.push(input.value)
         }
     });
     
@@ -39,7 +39,7 @@ function handle_inputs(inputs) {
     }
 }
 
-function antiSpam() {
+async function antiSpam() {
     let submitButton = document.getElementById('submit-btn');
     // Anti-spam
     submitButton.isActive = true;
@@ -49,20 +49,21 @@ function antiSpam() {
 }
 
 function login() {
-    document.getElementById('error-message').innerText = ""
+    document.getElementById('error-message').innerText = "";
     const inputs = [
         document.getElementById('username-input'),
         document.getElementById('password-input')
     ];
 
-    if (!handle_inputs(inputs)) {
-        return
-    }
+    if (!handle_inputs(inputs)) {return}
 
-    document.getElementById('error-message').innerText = ""
-    const request = fetch(`${API_URL}/auth`, {
+    document.getElementById('error-message').style.color = "white";
+    document.getElementById('error-message').innerText = "Aguarde....."
+
+    const request = fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({
             username: inputs[0].value,
             password: inputs[1].value
@@ -70,6 +71,13 @@ function login() {
     }).then(async(res) => {
         // Aqui deve ser validada a resposta da api futuramente...
         response_json = await res.json();
+        if (response_json.status == "error") {
+            document.getElementById('error-message').style.color = "red";
+            handle_error("invalidCredentials");
+        } else {
+            sessionStorage.setItem('X-finance-token', response_json.data)
+            window.location.href = "dashboard";
+        }
 
     }, (error) => {
         handle_error("apiError");
