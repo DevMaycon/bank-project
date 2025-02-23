@@ -21,3 +21,7 @@ CREATE TABLE balances(
 	user_id INTEGER,
 	value FLOAT
 );
+
+INSERT INTO users (username, password, email, address, birthdate, name, gender) VALUES (
+	'admin', 'admin', 'admin@financeadmin.com', 'Access Administrator 100.', '2000-01-01', 'Administrator', 'M'
+);

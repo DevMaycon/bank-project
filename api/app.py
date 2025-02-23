@@ -4,10 +4,11 @@ from routes import routes
 from dotenv import load_dotenv
 from os import environ
 
-config = load_dotenv('./configs/.env')
+config = load_dotenv('.env')
 
-API_HOST, API_PORT = environ.get("api-host"), environ.get('api-port')
-API_ORIGIN=environ.get('api-origin', '')
+API_HOST, API_PORT = environ.get("api_host"), environ.get('api_port')
+API_ORIGIN=environ.get('api_origin', '')
+
 
 def main() -> None:
     """Executa a api."""

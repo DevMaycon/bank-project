@@ -3,7 +3,7 @@ import psycopg
 import dotenv
 
 
-dotenv.load_dotenv('./configs/.env')
+dotenv.load_dotenv('../.env')
 
 DATABASE_NAME=environ.get('DATABASE_NAME'.lower())
 DATABASE_HOST=environ.get('DATABASE_HOST'.lower())
@@ -12,7 +12,6 @@ DATABASE_PASSWORD=environ.get('DATABASE_PASSWORD'.lower())
 DATABASE_USERNAME=environ.get('DATABASE_USERNAME'.lower())
 
 database = psycopg.connect(
-    database="financeDatabase"
     f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
 )
 
