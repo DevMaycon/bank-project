@@ -6,6 +6,17 @@ import jwt
 logged_users: dict[str, str] = {}
 
 
+def require_auth(func):
+    """Decorator for routes what is required login."""
+    from flask import request
+    
+    def wrapper():
+        # Verifica se o jwt é valido.
+        func()
+        
+    return wrapper
+
+
 def auth(form_data: dict):
     # Logica de login.
     username, password = form_data.get("username", None), form_data.get('password', None)

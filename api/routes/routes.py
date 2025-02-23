@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from flask_cors import cross_origin
 from json import loads
+
 import services.auth_logic
 import services
 
@@ -30,6 +31,7 @@ def auth():
 
 # Rotas do usuario
 @user_blueprint.route('/register', methods=["POST"])
+@services.auth_logic.require_auth
 def register():
     """Cria um usuário."""
     pass
