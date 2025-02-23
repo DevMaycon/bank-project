@@ -9,11 +9,27 @@ logged_users: dict[str, str] = {}
 def require_auth(func):
     """Decorator for routes what is required login."""
     from flask import request
-    
     def wrapper():
-        # Verifica se o jwt é valido.
-        func()
-        
+        try:
+            # Verifica se o jwt é valido.
+            auth_token = decode_token(request.headers["X-Auth-Key"])
+            if isinstance(auth_token, dict):
+                # Executa a função caso seja valido.
+                response = func()
+            else:
+                # Senão retorna status não autorizado para a requisição.
+                response = message_handler.error_message(
+                    error_type="unauthorized",
+                    error_code=401
+                )
+            return response
+        except KeyError as key:
+            response = message_handler.error_message(
+                error_type="unauthorized",
+                error_code=401,
+                custom_message=f"{str(key).replace('HTTP_', '')} Header Not Found."
+            )
+            return response
     return wrapper
 
 
@@ -72,12 +88,18 @@ def decode_token(token_jwt: str):
             error_code=401
         )
         return response
+    except jwt.exceptions.DecodeError:
+        response = message_handler.error_message(
+            error_type="token_invalid",
+            error_code=401
+        )
+        return response
     except jwt.ExpiredSignatureError:
         response = message_handler.error_message(
             error_type="token_expired",
             error_code=401
         )
         return response
-    
+
     # Retorna Token Caso Nenhum Erro.
     return response
