@@ -18,18 +18,6 @@ def connect():
         sleep(2)
         return connect()
 
-def execute_login(username):
-    with database.cursor() as cursor:
-        cursor.execute(
-            "SELECT id, password FROM users where (username = %s or email = %s)",
-            (username,username)
-        )
-        response = cursor.fetchone()
-        if response:
-            return True, response
-        else:
-            return False, "Error"
-
 
 DATABASE_NAME=environ.get('DATABASE_NAME'.lower())
 DATABASE_HOST=environ.get('DATABASE_HOST'.lower())
