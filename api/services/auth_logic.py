@@ -9,13 +9,13 @@ logged_users: dict[str, str] = {}
 def require_auth(func):
     """Decorator for routes what is required login."""
     from flask import request
-    def wrapper():
+    def wrapper(*args):
         try:
             # Verifica se o jwt é valido.
             auth_token = decode_token(request.headers["X-Auth-Key"])
             if isinstance(auth_token, dict):
                 # Executa a função caso seja valido.
-                response = func()
+                response = func(args)
             else:
                 # Senão retorna status não autorizado para a requisição.
                 response = message_handler.error_message(
@@ -32,11 +32,22 @@ def require_auth(func):
             return response
     return wrapper
 
+def execute_login(username):
+    with connection.database.cursor() as cursor:
+        cursor.execute(
+            "SELECT id, password FROM users where (username = %s or email = %s)",
+            (username,username)
+        )
+        response = cursor.fetchone()
+    if response:
+        return True, response
+    else:
+        return False, "Error"
 
 def auth(form_data: dict):
     # Logica de login.
     username, password = form_data.get("username", None), form_data.get('password', None)
-    sql_response = connection.execute_login(username)
+    sql_response = execute_login(username)
     sql_response = {
         "STATUS": sql_response[0],
         "ID": sql_response[1][0],
@@ -44,15 +55,12 @@ def auth(form_data: dict):
     }
     
     if sql_response["STATUS"] and (password == sql_response['PASSWORD']):
-        if (username in logged_users and isinstance(decode_token(logged_users[username]), str)):
-            jwt_token = logged_users[username]
-        else:
-            token_payload = { "user_id": sql_response["ID"] }
-            
-            jwt_token = encode_token(payload=token_payload)
-            logged_users[username] = jwt_token  
-            
-            del token_payload
+        print(logged_users.get(username))
+        
+        token_payload = { "user_id": sql_response["ID"] }
+        jwt_token = logged_users.get(username, encode_token(payload=token_payload))
+        logged_users[username] = jwt_token   
+        del token_payload   
             
         response = message_handler.success_message(
             success_type="login_success",

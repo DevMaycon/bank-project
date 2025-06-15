@@ -1,9 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
 from json import loads
 
-import services.auth_logic
-import services
+from services import auth_logic, user_logic
 
 # Blueprints das rotas
 auth_blueprint = Blueprint('auth', __name__)
@@ -20,7 +19,7 @@ def configure_routes(app):
 @cross_origin(supports_credentials=True)
 def auth():
     login_data = request.json
-    response = services.auth_logic.auth(login_data)
+    response = auth_logic.auth(login_data)
     
     response_text = loads(response[0].response[0])
     
@@ -31,26 +30,26 @@ def auth():
 
 # Rotas do usuario
 @user_blueprint.route('/register', methods=["POST"])
-def register():
+def register_user():
     """Cria um usuário."""
     pass
 
 @user_blueprint.route('/addtransaction', methods=["POST"])
-def add_transaction():
+def add_user_transaction():
     """Cria uma transação."""
     pass
 
 @user_blueprint.route('/addbalance', methods=["POST"])
-def add_balance():
+def add_user_balance():
     """Adiciona saldo a uma carteira."""
     pass
 
 @user_blueprint.route('/balance', methods=["GET"])
-def balance():
+def get_user_balance():
     """Consulta o saldo da carteira do usuário."""
     pass
 
-@user_blueprint.route('/transactions', methods=["GET"])
-def get_transactions():
+@user_blueprint.route('/transactions/<int:user_id>', methods=["GET"])
+def get_user_transactions(user_id):
     """Lista transações do usuário."""
-    pass
+    return user_logic.get_user_transactions(user_id)
