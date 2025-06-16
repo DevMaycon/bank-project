@@ -6,6 +6,9 @@ ERROR_MESSAGES = {
     'validation_error': 'Os dados fornecidos são inválidos',
     'token_invalid': 'Token de autenticação inválido',
     'token_expired': 'Token de autenticação expirado',
+    'insufficient_balance': 'Saldo insuficiente para realizar a transação',
+    'transaction_failed': 'Falha ao processar a transação',
+    'user_not_found': 'Usuário não encontrado',
 }
 
 SUCCESS_MESSAGES = {
@@ -13,6 +16,14 @@ SUCCESS_MESSAGES = {
     'token_valid': 'Token de autenticação válido',
     'logout_success': 'Logout realizado com sucesso',
     'access_granted': 'Acesso autorizado',
+    'user_found': 'Usuário encontrado com sucesso',
+    'user_created': 'Usuário criado com sucesso',
+    'balance_added': 'Saldo adicionado com sucesso',
+    'balance_updated': 'Saldo atualizado com sucesso',
+    'transaction_success': 'Transação realizada com sucesso',
+    'transaction_created': 'Transação criada com sucesso',
+    'transaction_cancelled': 'Transação cancelada com sucesso',
+    'transfer_completed': 'Transferência concluída com sucesso',
 }
 
 

@@ -5,6 +5,35 @@ import jwt
 
 logged_users: dict[str, str] = {}
 
+def encode_token(payload: dict):
+    payload['exp'] = datetime.datetime.now() + datetime.timedelta(minutes=15)
+    jwt_token = jwt.encode(payload, "secret-key", algorithm="HS256")
+    
+    return jwt_token
+
+def decode_token(token_jwt: str):
+    # Decodifica um token jwt-token e verifica sua assinatura.
+    # Se for valido retorna o token, caso contrario retorna um erro.
+    try:
+        jwt_token = jwt.decode(token_jwt, "secret-key", algorithms="HS256")
+        response = jwt_token
+    except jwt.InvalidSignatureError:
+        response = message_handler.error_message(
+            error_type="token_invalid",
+            error_code=401
+        )
+    except jwt.exceptions.DecodeError:
+        response = message_handler.error_message(
+            error_type="token_invalid",
+            error_code=401
+        )
+    except jwt.ExpiredSignatureError:
+        response = message_handler.error_message(
+            error_type="token_expired",
+            error_code=401
+        )
+    
+    return response
 
 def require_auth(func):
     """Decorator for routes what is required login."""
@@ -15,7 +44,7 @@ def require_auth(func):
             auth_token = decode_token(request.headers["X-Auth-Key"])
             if isinstance(auth_token, dict):
                 # Executa a função caso seja valido.
-                response = func(args)
+                response = func(*args)
             else:
                 # Senão retorna status não autorizado para a requisição.
                 response = message_handler.error_message(
@@ -56,17 +85,8 @@ def auth(form_data: dict):
     
     if sql_response["STATUS"] and (password == sql_response['PASSWORD']):
         token_payload = { "user_id": sql_response["ID"] }
-        
-        if logged_users.get(username):
-            jwt_token = logged_users[username]
-
-        elif logged_users.get(username) and not isinstance(decode_token(jwt_token), str):
-            jwt_token = encode_token(payload=token_payload)
-            logged_users[username] = jwt_token
-            
-        else:
-            jwt_token = encode_token(payload=token_payload)
-            logged_users[username] = jwt_token
+        jwt_token = encode_token(payload=token_payload)
+        logged_users[username] = jwt_token
             
         response = message_handler.success_message(
             success_type="login_success",
@@ -80,34 +100,12 @@ def auth(form_data: dict):
         
     return response
 
-
-def encode_token(payload: dict):
-    payload['exp'] = datetime.datetime.now() + datetime.timedelta(minutes=15)
-    jwt_token = jwt.encode(payload, "secret-key", algorithm="HS256")
-    
-    return jwt_token
-
-
-def decode_token(token_jwt: str):
-    # Decodifica um token jwt-token e verifica sua assinatura.
-    # Se for valido retorna o token, caso contrario retorna um erro.
-    try:
-        jwt_token = jwt.decode(token_jwt, "secret-key", algorithms="HS256")
-        response = jwt_token
-    except jwt.InvalidSignatureError:
-        response = message_handler.error_message(
-            error_type="token_invalid",
-            error_code=401
+def register_user(username, password, email):
+    """Cria um usuário."""
+    with connection.database.cursor() as query:
+        query.execute(
+            "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)",
+            (username, password, email)
         )
-    except jwt.exceptions.DecodeError:
-        response = message_handler.error_message(
-            error_type="token_invalid",
-            error_code=401
-        )
-    except jwt.ExpiredSignatureError:
-        response = message_handler.error_message(
-            error_type="token_expired",
-            error_code=401
-        )
-    
-    return response
+    connection.database.commit()
+    return message_handler.success_message("user_created")
