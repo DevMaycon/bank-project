@@ -55,8 +55,6 @@ def auth(form_data: dict):
     }
     
     if sql_response["STATUS"] and (password == sql_response['PASSWORD']):
-        print(logged_users.get(username))
-        
         token_payload = { "user_id": sql_response["ID"] }
         jwt_token = logged_users.get(username, encode_token(payload=token_payload))
         logged_users[username] = jwt_token   
@@ -76,7 +74,6 @@ def auth(form_data: dict):
 
 
 def encode_token(payload: dict):
-    # Cria um jwt-token com 15 minutos de vida.
     payload['exp'] = datetime.datetime.now() + datetime.timedelta(minutes=15)
     
     jwt_token = jwt.encode(payload, "secret-key", algorithm="HS256")
@@ -86,7 +83,7 @@ def encode_token(payload: dict):
 
 def decode_token(token_jwt: str):
     # Decodifica um token jwt-token e verifica sua assinatura.
-    
+    # Se for valido retorna o token, caso contrario retorna um erro.
     try:
         jwt_token = jwt.decode(token_jwt, "secret-key", algorithms="HS256")
         response = jwt_token
@@ -108,6 +105,4 @@ def decode_token(token_jwt: str):
             error_code=401
         )
         return response
-
-    # Retorna Token Caso Nenhum Erro.
     return response

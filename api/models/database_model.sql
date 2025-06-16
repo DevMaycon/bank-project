@@ -25,3 +25,5 @@ CREATE TABLE balances(
 INSERT INTO users (username, password, email, address, birthdate, name, gender) VALUES (
 	'admin', 'admin', 'admin@financeadmin.com', 'Access Administrator 100.', '2000-01-01', 'Administrator', 'M'
 );
+
+INSERT INTO balances (user_id, value) SELECT id, 1000000000000000.00 FROM users WHERE email = 'admin@financeadmin.com';

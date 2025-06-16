@@ -34,20 +34,20 @@ def register_user():
     """Cria um usuário."""
     pass
 
-@user_blueprint.route('/addtransaction', methods=["POST"])
+@user_blueprint.route('/addtransaction/<int:user_id>', methods=["POST"])
 def add_user_transaction():
     """Cria uma transação."""
     pass
 
-@user_blueprint.route('/addbalance', methods=["POST"])
+@user_blueprint.route('/addbalance/<int:user_id>', methods=["POST"])
 def add_user_balance():
     """Adiciona saldo a uma carteira."""
     pass
 
-@user_blueprint.route('/balance', methods=["GET"])
-def get_user_balance():
+@user_blueprint.route('/balance/<int:user_id>', methods=["GET"])
+def get_user_balance(user_id):
     """Consulta o saldo da carteira do usuário."""
-    pass
+    return user_logic.get_user_balance(user_id)
 
 @user_blueprint.route('/transactions/<int:user_id>', methods=["GET"])
 def get_user_transactions(user_id):

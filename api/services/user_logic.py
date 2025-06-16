@@ -15,10 +15,18 @@ def add_user_transaction(user_id, amount, description):
 def add_user_balance(user_id, amount, description):
     """Adiciona saldo a uma carteira."""
     pass
+
 @require_auth
 def get_user_balance(user_id):
     """Consulta o saldo da carteira do usuário."""
-    pass
+    with connection.database.cursor() as query:
+        user_id = int(user_id[0])
+        query.execute(
+            "SELECT * FROM balances WHERE user_id = %s",
+            (user_id,)
+        )
+        balance = query.fetchall()
+    return balance
 
 @require_auth
 def get_user_transactions(user_id):
