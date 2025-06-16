@@ -9,6 +9,7 @@ ERROR_MESSAGES = {
     'insufficient_balance': 'Saldo insuficiente para realizar a transação',
     'transaction_failed': 'Falha ao processar a transação',
     'user_not_found': 'Usuário não encontrado',
+    'user_already_exists': 'Usuário já existe'
 }
 
 SUCCESS_MESSAGES = {

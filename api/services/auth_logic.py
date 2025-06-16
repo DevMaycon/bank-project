@@ -1,3 +1,4 @@
+from psycopg import errors
 from handlers import message_handler
 from database import connection
 import datetime
@@ -102,10 +103,21 @@ def auth(form_data: dict):
 
 def register_user(username, password, email):
     """Cria um usuário."""
-    with connection.database.cursor() as query:
-        query.execute(
-            "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)",
-            (username, password, email)
+    try:
+        with connection.database.cursor() as query:
+            query.execute(
+                "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)",
+                (username, password, email)
+            )
+            query.execute(
+                "INSERT INTO balances (user_id, value) SELECT id, 0 FROM users WHERE username = %s",
+                (username,)
+            )
+        connection.database.commit()
+        return message_handler.success_message("user_created")
+    except errors.UniqueViolation:
+        connection.database.rollback()
+        return message_handler.error_message(
+            error_type="user_already_exists",
+            error_code=401
         )
-    connection.database.commit()
-    return message_handler.success_message("user_created")

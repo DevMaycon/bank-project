@@ -1,8 +1,8 @@
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(255),
+	username VARCHAR(255) UNIQUE NOT NULL,
 	password VARCHAR(255),
-	email VARCHAR(255),
+	email VARCHAR(255) UNIQUE NOT NULL,
 	address VARCHAR(100),
 	birthdate DATE,
 	name VARCHAR(255),
@@ -18,7 +18,7 @@ CREATE TABLE transactions(
 
 CREATE TABLE balances(
 	balance_id SERIAL PRIMARY KEY,
-	user_id INTEGER,
+	user_id INTEGER UNIQUE,
 	value FLOAT
 );
 
