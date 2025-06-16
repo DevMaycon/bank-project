@@ -56,9 +56,17 @@ def auth(form_data: dict):
     
     if sql_response["STATUS"] and (password == sql_response['PASSWORD']):
         token_payload = { "user_id": sql_response["ID"] }
-        jwt_token = logged_users.get(username, encode_token(payload=token_payload))
-        logged_users[username] = jwt_token   
-        del token_payload   
+        
+        if logged_users.get(username):
+            jwt_token = logged_users[username]
+
+        elif logged_users.get(username) and not isinstance(decode_token(jwt_token), str):
+            jwt_token = encode_token(payload=token_payload)
+            logged_users[username] = jwt_token
+            
+        else:
+            jwt_token = encode_token(payload=token_payload)
+            logged_users[username] = jwt_token
             
         response = message_handler.success_message(
             success_type="login_success",
@@ -75,7 +83,6 @@ def auth(form_data: dict):
 
 def encode_token(payload: dict):
     payload['exp'] = datetime.datetime.now() + datetime.timedelta(minutes=15)
-    
     jwt_token = jwt.encode(payload, "secret-key", algorithm="HS256")
     
     return jwt_token
@@ -92,17 +99,15 @@ def decode_token(token_jwt: str):
             error_type="token_invalid",
             error_code=401
         )
-        return response
     except jwt.exceptions.DecodeError:
         response = message_handler.error_message(
             error_type="token_invalid",
             error_code=401
         )
-        return response
     except jwt.ExpiredSignatureError:
         response = message_handler.error_message(
             error_type="token_expired",
             error_code=401
         )
-        return response
+    
     return response
