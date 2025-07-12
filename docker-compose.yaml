@@ -1,0 +1,48 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: financeDB
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${database_name}
+      POSTGRES_USER: ${database_username}
+      POSTGRES_PASSWORD: ${database_password}
+    ports:
+      - "${database_port}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./api/models/database_model.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    build: .
+    container_name: financeAPI
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      api_port: ${api_port}
+      api_host: ${api_host}
+      api_origin: ${api_origin}
+    ports:
+      - "${api_port}:5500"
+    volumes:
+      - ./api/:/api/
+
+
+  website:
+    image: ubuntu/apache2:latest
+    container_name: financeWEB
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${website_port}:80"
+    volumes:
+      - ./public/:/var/www/html/
+
+volumes:
+  pg_data:
